@@ -36,35 +36,35 @@ export default function MenuDisplay({ data }: { data: MenuResponse }) {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50/80 via-pink-50/50 to-indigo-50/60 backdrop-blur-3xl">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16">
+      <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-6 sm:py-10 md:py-16">
         {/* Hero Header */}
-        <header className="text-center mb-16 animate-in fade-in slide-in-from-top duration-700">
-          <div className="inline-flex items-center gap-3 px-5 py-2 bg-white/70 backdrop-blur-lg rounded-full border border-purple-200 shadow-sm mb-6">
-            <Sparkles className="w-5 h-5 text-purple-600" />
-            <span className="text-sm font-bold text-purple-700 tracking-wider">
+        <header className="text-center mb-8 sm:mb-12 md:mb-16 animate-in fade-in slide-in-from-top duration-700">
+          <div className="inline-flex items-center gap-2 sm:gap-3 px-3 sm:px-4 md:px-5 py-1.5 sm:py-2 bg-white/70 backdrop-blur-lg rounded-full border border-purple-200 shadow-sm mb-4 sm:mb-6">
+            <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 text-purple-600" />
+            <span className="text-xs sm:text-sm font-bold text-purple-700 tracking-wider">
               Fresh Daily Menu
             </span>
           </div>
 
-          <h1 className="text-5xl sm:text-6xl md:text-7xl font-black bg-gradient-to-r from-purple-600 via-pink-600 to-purple-700 bg-clip-text text-transparent leading-tight">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black bg-gradient-to-r from-purple-600 via-pink-600 to-purple-700 bg-clip-text text-transparent leading-tight px-2">
             {period.name}
           </h1>
 
-          <div className="flex items-center justify-center gap-2 mt-4 text-gray-600">
-            <Calendar className="w-5 h-5" />
-            <time className="text-lg font-medium">{formattedDate}</time>
+          <div className="flex items-center justify-center gap-2 mt-3 sm:mt-4 text-gray-600">
+            <Calendar className="w-4 h-4 sm:w-5 sm:h-5" />
+            <time className="text-sm sm:text-base md:text-lg font-medium">{formattedDate}</time>
           </div>
         </header>
 
         {period.categories.length === 0 ? (
-          <div className="text-center py-32">
-            <div className="bg-gray-100 rounded-3xl w-24 h-24 mx-auto mb-6 flex items-center justify-center">
-              <Sparkles className="w-12 h-12 text-gray-400" />
+          <div className="text-center py-16 sm:py-24 md:py-32">
+            <div className="bg-gray-100 rounded-3xl w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 mx-auto mb-4 sm:mb-6 flex items-center justify-center">
+              <Sparkles className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 text-gray-400" />
             </div>
-            <p className="text-xl text-gray-500">No menu available today</p>
+            <p className="text-base sm:text-lg md:text-xl text-gray-500">No menu available today</p>
           </div>
         ) : (
-          <div className="space-y-24">
+          <div className="space-y-12 sm:space-y-16 md:space-y-20 lg:space-y-24">
             {period.categories.map((category, i) => (
               <CategorySection key={category.id} category={category} index={i} />
             ))}
@@ -103,41 +103,41 @@ function CategorySection({ category, index }: { category: Category; index: numbe
       style={{ animationDelay: `${index * 150}ms` }}
     >
       {/* Category Title */}
-      <div className="flex items-center gap-6 mb-10">
-        <h2 className="text-4xl sm:text-5xl font-black text-gray-900 tracking-tight">
+      <div className="flex items-center gap-3 sm:gap-4 md:gap-6 mb-6 sm:mb-8 md:mb-10">
+        <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black text-gray-900 tracking-tight flex-shrink-0">
           {category.name}
         </h2>
-        <div className="h-1.5 flex-1 bg-gradient-to-r from-purple-500 via-pink-500 to-transparent rounded-full opacity-60"></div>
+        <div className="h-0.5 sm:h-1 md:h-1.5 flex-1 bg-gradient-to-r from-purple-500 via-pink-500 to-transparent rounded-full opacity-60 min-w-0"></div>
       </div>
 
       {/* Highest Protein Hero Card */}
       {highestProtein && highestProtein.value > 15 && (
-        <div className="mb-12 -mx-4 sm:mx-0">
-          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-purple-600 to-pink-600 p-1 shadow-2xl">
-            <div className="bg-white/95 backdrop-blur-xl rounded-3xl p-6 sm:p-8 flex items-center gap-6">
-              <div className="flex-shrink-0 p-4 bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl">
-                <Beef className="w-12 h-12 text-white" />
+        <div className="mb-8 sm:mb-10 md:mb-12 -mx-3 sm:-mx-4 md:mx-0">
+          <div className="relative overflow-hidden rounded-2xl sm:rounded-3xl bg-gradient-to-r from-purple-600 to-pink-600 p-0.5 sm:p-1 shadow-2xl">
+            <div className="bg-white/95 backdrop-blur-xl rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6">
+              <div className="flex-shrink-0 p-3 sm:p-4 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl sm:rounded-2xl">
+                <Beef className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 text-white" />
               </div>
-              <div>
-                <p className="text-purple-600 font-bold text-sm uppercase tracking-wider">
+              <div className="flex-1 min-w-0">
+                <p className="text-purple-600 font-bold text-xs sm:text-sm uppercase tracking-wider">
                   Highest Protein Today
                 </p>
-                <h3 className="text-3xl font-black text-gray-900 mt-1">
+                <h3 className="text-xl sm:text-2xl md:text-3xl font-black text-gray-900 mt-1 break-words">
                   {highestProtein.item.name}
                 </h3>
-                <p className="text-5xl font-black text-purple-600 mt-2">
+                <p className="text-3xl sm:text-4xl md:text-5xl font-black text-purple-600 mt-2">
                   {highestProtein.value}g
-                  <span className="text-2xl text-gray-600 ml-2">protein</span>
+                  <span className="text-lg sm:text-xl md:text-2xl text-gray-600 ml-2">protein</span>
                 </p>
               </div>
-              <Flame className="w-16 h-16 text-purple-300 absolute -top-4 -right-4 opacity-30" />
+              <Flame className="hidden sm:block w-12 h-12 md:w-16 md:h-16 text-purple-300 absolute -top-2 -right-2 md:-top-4 md:-right-4 opacity-30" />
             </div>
           </div>
         </div>
       )}
 
       {/* Menu Items Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5 md:gap-6">
         {category.items.map((item, i) => (
           <MenuItem
             key={item.id}
@@ -190,22 +190,23 @@ function MenuItem({
     >
       {/* Top Badge */}
       {isHighestProtein && (
-        <div className="absolute top-0 inset-x-0 bg-gradient-to-r from-purple-600 to-pink-600 text-white text-center py-2.5 font-bold text-sm z-10 shadow-md">
-          <span className="flex items-center justify-center gap-1.5">
-            <Flame className="w-4 h-4" />
-            HIGHEST PROTEIN
+        <div className="absolute top-0 inset-x-0 bg-gradient-to-r from-purple-600 to-pink-600 text-white text-center py-2 sm:py-2.5 font-bold text-xs sm:text-sm z-10 shadow-md">
+          <span className="flex items-center justify-center gap-1 sm:gap-1.5">
+            <Flame className="w-3 h-3 sm:w-4 sm:h-4" />
+            <span className="hidden sm:inline">HIGHEST PROTEIN</span>
+            <span className="sm:hidden">TOP PROTEIN</span>
           </span>
         </div>
       )}
 
-      <div className={`p-6 ${isHighestProtein ? "pt-14" : ""} space-y-5`}>
+      <div className={`p-4 sm:p-5 md:p-6 ${isHighestProtein ? "pt-12 sm:pt-14" : ""} space-y-4 sm:space-y-5`}>
         {/* Name & Calories */}
-        <div className="flex justify-between items-start gap-4">
-          <h3 className="text-lg font-bold text-gray-900 leading-tight flex-1">
+        <div className="flex justify-between items-start gap-3 sm:gap-4">
+          <h3 className="text-base sm:text-lg font-bold text-gray-900 leading-tight flex-1 min-w-0">
             {item.name}
           </h3>
-          <div className="text-right">
-            <div className="text-2xl font-black text-purple-600">
+          <div className="text-right flex-shrink-0">
+            <div className="text-xl sm:text-2xl font-black text-purple-600">
               {item.calories || "-"}
             </div>
             <div className="text-xs text-gray-500 font-medium">cal</div>
@@ -230,7 +231,7 @@ function MenuItem({
 
         {/* Macros */}
         {(nutrients.protein || nutrients.carbs || nutrients.fat || nutrients.sugar) && (
-          <div className="grid grid-cols-2 gap-4 pt-4 border-t border-gray-200">
+          <div className="grid grid-cols-2 gap-3 sm:gap-4 pt-3 sm:pt-4 border-t border-gray-200">
             {nutrients.protein && (
               <Macro label="Protein" value={formatNutrientValue(nutrients.protein.value, nutrients.protein.uom)} highlight />
             )}
@@ -269,10 +270,10 @@ function Macro({
   warning?: boolean;
 }) {
   return (
-    <div className="flex justify-between items-center">
-      <span className="text-sm font-semibold text-gray-600">{label}</span>
+    <div className="flex justify-between items-center gap-2 min-w-0">
+      <span className="text-xs sm:text-sm font-semibold text-gray-600 truncate">{label}</span>
       <span
-        className={`font-black text-lg ${
+        className={`font-black text-base sm:text-lg whitespace-nowrap flex-shrink-0 ${
           highlight
             ? "text-purple-600"
             : warning
