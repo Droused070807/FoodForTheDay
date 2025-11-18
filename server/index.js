@@ -18,7 +18,13 @@ app.use(cors({
 // Create API router to ensure API routes are handled separately
 const apiRouter = express.Router();
 
+// Test endpoint to verify API is working
+apiRouter.get("/test", (req, res) => {
+  res.json({ message: "API is working!", timestamp: new Date().toISOString() });
+});
+
 apiRouter.get("/menu", async (req, res) => {
+  console.log("API /api/menu called with:", { date: req.query.date, meal: req.query.meal });
   const { date, meal } = req.query;
 
   if (!date) {
@@ -27,6 +33,7 @@ apiRouter.get("/menu", async (req, res) => {
 
   try {
     const result = await scrapeMenu(date, meal);
+    console.log("API /api/menu returning result");
     res.json(result);
   } catch (error) {
     console.error("Error scraping menu:", error);
@@ -40,23 +47,27 @@ app.use("/api", apiRouter);
 // Serve frontend if dist folder exists (for full-stack deployment)
 const distPath = join(__dirname, "..", "dist");
 if (existsSync(distPath)) {
-  // Serve static files (CSS, JS, images, etc.) - skip API routes
+  // Serve static files (CSS, JS, images, etc.) - explicitly skip API routes
   app.use((req, res, next) => {
-    // Skip static file serving for API routes
+    // CRITICAL: Skip static file serving for API routes
     if (req.path.startsWith("/api")) {
+      console.log("Skipping static file serving for API route:", req.path);
       return next();
     }
-    // Serve static files for non-API routes
-    express.static(distPath, { index: false })(req, res, next);
+    // Serve static files for non-API routes only
+    const staticHandler = express.static(distPath, { index: false });
+    staticHandler(req, res, next);
   });
   
   // Serve index.html for all non-API routes (SPA fallback)
-  // This must be last to catch all non-API routes
-  app.get("*", (req, res) => {
-    // Safety check - API routes should never reach here
+  // IMPORTANT: This must NOT match API routes - they're already handled above
+  app.get("*", (req, res, next) => {
+    // CRITICAL: Never serve HTML for API routes
     if (req.path.startsWith("/api")) {
+      console.log("Catch-all route: API route detected, returning 404:", req.path);
       return res.status(404).json({ error: "API endpoint not found" });
     }
+    console.log("Serving index.html for route:", req.path);
     const indexPath = join(distPath, "index.html");
     if (existsSync(indexPath)) {
       res.sendFile(indexPath);
