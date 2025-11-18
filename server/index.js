@@ -30,12 +30,6 @@ apiRouter.get("/test", (req, res) => {
   res.json({ message: "API is working!", timestamp: new Date().toISOString(), path: req.path });
 });
 
-// Catch-all for API router to handle unmatched API routes
-apiRouter.use("*", (req, res) => {
-  console.log("API route not found in router:", req.originalUrl);
-  res.status(404).json({ error: "API endpoint not found", path: req.path });
-});
-
 apiRouter.get("/menu", async (req, res) => {
   console.log("API /api/menu called with:", { date: req.query.date, meal: req.query.meal });
   const { date, meal } = req.query;
@@ -52,6 +46,12 @@ apiRouter.get("/menu", async (req, res) => {
     console.error("Error scraping menu:", error);
     res.status(500).json({ error: error.message || "Failed to fetch menu data" });
   }
+});
+
+// Catch-all for API router to handle unmatched API routes (must be last in router)
+apiRouter.use("*", (req, res) => {
+  console.log("API route not found in router:", req.originalUrl);
+  res.status(404).json({ error: "API endpoint not found", path: req.path });
 });
 
 // Mount API router FIRST - before any other routes
