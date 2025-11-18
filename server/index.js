@@ -10,6 +10,12 @@ const __dirname = dirname(__filename);
 
 const app = express();
 
+// CRITICAL: Add middleware at the very start to log all requests
+app.use((req, res, next) => {
+  console.log(`[${req.method}] ${req.path} - API route: ${req.path.startsWith("/api")}`);
+  next();
+});
+
 app.use(cors({
   origin: "*",
   methods: ["GET"],
@@ -41,23 +47,33 @@ apiRouter.get("/menu", async (req, res) => {
   }
 });
 
-// Mount API router - MUST be before static file serving
+// Mount API router FIRST - before any other routes
 app.use("/api", apiRouter);
+
+// CRITICAL: Add middleware to ensure API routes never get HTML
+app.use((req, res, next) => {
+  if (req.path.startsWith("/api")) {
+    // If we reach here and it's an API route, it means the API router didn't handle it
+    console.error("API route not handled by router:", req.path);
+    return res.status(404).json({ error: "API endpoint not found" });
+  }
+  next();
+});
 
 // Serve frontend if dist folder exists (for full-stack deployment)
 const distPath = join(__dirname, "..", "dist");
 if (existsSync(distPath)) {
-  // Create a static file handler that only serves non-API routes
-  const staticHandler = express.static(distPath, { index: false });
+  console.log("Frontend dist folder found at:", distPath);
   
-  // Middleware to serve static files only for non-API routes
+  // Serve static files (CSS, JS, images) - ONLY for non-API routes
   app.use((req, res, next) => {
-    // CRITICAL: Skip static file serving for API routes
+    // NEVER serve static files for API routes
     if (req.path.startsWith("/api")) {
-      return next(); // Let API routes pass through
+      console.log("Skipping static file serving for API route:", req.path);
+      return next();
     }
-    // Serve static files for non-API routes
-    staticHandler(req, res, (err) => {
+    // Serve static files for non-API routes only
+    express.static(distPath, { index: false })(req, res, (err) => {
       if (err) {
         return next(err);
       }
@@ -68,10 +84,9 @@ if (existsSync(distPath)) {
     });
   });
   
-  // Serve index.html for all non-API routes (SPA fallback)
-  // Use a pattern that explicitly excludes /api paths
+  // Serve index.html ONLY for non-API routes (SPA fallback)
   app.get(/^(?!\/api).*$/, (req, res) => {
-    console.log("Serving index.html for route:", req.path);
+    console.log("Serving index.html for non-API route:", req.path);
     const indexPath = join(distPath, "index.html");
     if (existsSync(indexPath)) {
       res.sendFile(indexPath);
