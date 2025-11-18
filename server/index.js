@@ -10,9 +10,15 @@ const __dirname = dirname(__filename);
 
 const app = express();
 
-// CRITICAL: Add middleware at the very start to log all requests
+// CRITICAL: Add middleware at the very start to log all requests and set JSON content type for API routes
 app.use((req, res, next) => {
   console.log(`[${req.method}] ${req.path} - API route: ${req.path.startsWith("/api")}`);
+  
+  // Force JSON content type for API routes to prevent HTML from being served
+  if (req.path.startsWith("/api")) {
+    res.setHeader('Content-Type', 'application/json');
+  }
+  
   next();
 });
 
