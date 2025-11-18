@@ -1,4 +1,6 @@
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+// Use same origin if deployed together, otherwise use env var or localhost
+const API_URL = import.meta.env.VITE_API_URL || 
+  (typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3001');
 
 export const fetchData = async (date: string, meal?: string): Promise<unknown> => {
   const url = new URL(`${API_URL}/api/menu`);
